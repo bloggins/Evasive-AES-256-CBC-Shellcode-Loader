@@ -8,4 +8,4 @@ use VS...
 Project Included!
 
 
-**Also included Silent (Production) Loader - contains zero debug or terminal output & no comments**
+**Also included Silent (Production) Loader - contains zero debug, terminal output, no comments plus hide console**
