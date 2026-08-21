@@ -1,7 +1,0 @@
-C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\Evasive-AES-256-CBC-Shellcode-Loader\bin\x64\Release\Evasive-AES-256-CBC-Shellcode-Loader.exe.config
-C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\Evasive-AES-256-CBC-Shellcode-Loader\bin\x64\Release\Evasive-AES-256-CBC-Shellcode-Loader.exe
-C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\Evasive-AES-256-CBC-Shellcode-Loader\bin\x64\Release\Evasive-AES-256-CBC-Shellcode-Loader.pdb
-C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\Evasive-AES-256-CBC-Shellcode-Loader\obj\x64\Release\Evasive-AES-256-CBC-Shellcode-Loader.csproj.AssemblyReference.cache
-C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\Evasive-AES-256-CBC-Shellcode-Loader\obj\x64\Release\Evasive-AES-256-CBC-Shellcode-Loader.csproj.CoreCompileInputs.cache
-C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\Evasive-AES-256-CBC-Shellcode-Loader\obj\x64\Release\Evasive-AES-256-CBC-Shellcode-Loader.exe
-C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\Evasive-AES-256-CBC-Shellcode-Loader\obj\x64\Release\Evasive-AES-256-CBC-Shellcode-Loader.pdb
