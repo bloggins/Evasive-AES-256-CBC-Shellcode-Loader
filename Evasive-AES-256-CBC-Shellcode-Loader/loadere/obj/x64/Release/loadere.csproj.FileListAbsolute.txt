@@ -1,0 +1,7 @@
+C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\loadere\bin\x64\Release\loadere.exe.config
+C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\loadere\bin\x64\Release\loadere.exe
+C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\loadere\bin\x64\Release\loadere.pdb
+C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\loadere\obj\x64\Release\loadere.csproj.AssemblyReference.cache
+C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\loadere\obj\x64\Release\loadere.csproj.CoreCompileInputs.cache
+C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\loadere\obj\x64\Release\loadere.exe
+C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\loadere\obj\x64\Release\loadere.pdb
