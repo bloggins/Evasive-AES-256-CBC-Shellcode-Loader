@@ -1,0 +1,6 @@
+C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\loaderd\bin\Release\loaderd.dll
+C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\loaderd\bin\Release\loaderd.pdb
+C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\loaderd\obj\Release\loaderd.csproj.AssemblyReference.cache
+C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\loaderd\obj\Release\loaderd.csproj.CoreCompileInputs.cache
+C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\loaderd\obj\Release\loaderd.dll
+C:\Users\dev\source\Evasive-AES-256-CBC-Shellcode-Loader\loaderd\obj\Release\loaderd.pdb

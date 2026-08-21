@@ -1,0 +1,10 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="loaderd/loaderd.csproj" Id="540da14e-2d02-4b1d-abc6-a39fd37d5f8c" />
+  <Project Path="loadere/loadere.csproj" Id="018f0a77-caad-449b-b384-0554adf86da7">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+</Solution>
