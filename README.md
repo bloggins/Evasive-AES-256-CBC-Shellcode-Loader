@@ -1,6 +1,6 @@
 
 Build in Linux using build_loader.sh 
-
+(exe only)
 or
 
 use VS...
